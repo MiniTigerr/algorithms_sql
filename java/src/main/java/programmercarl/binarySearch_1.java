@@ -102,22 +102,68 @@ public class binarySearch_1 {
           (2)在数组范围中，但是没有目标值
           (3)在数组范围中，并且有目标值
      */
+    // 寻找右边界 找大于目标值的位置
+    public static int rightBorder(int[] nums, int target){
+        int left=0;
+        int right=nums.length-1;
+        int rightBorder = -2; // 如果rightBorder最后都没有被赋值，那目标值在数组左边
+        while (left <= right) {
+            int middle = (left + right)/2;
+            if (nums[middle] > target) {
+                right = middle - 1;
+            } else{
+                left = middle + 1;
+                rightBorder = left;
+            }
+        }
+        return rightBorder;
+    }
+    // 寻找左边界
+    public static int leftBorder(int[] nums, int target){
+        int left=0;
+        int right=nums.length-1;
+        int leftBorder = -2; // 如果leftBorder最后都没有被赋值，那目标值在数组右边
+        while (left <= right) {
+            int middle = (left + right)/2;
+            if (nums[middle] < target) {
+                left = middle + 1;
+            } else{
+                right = middle - 1;
+                leftBorder = right;
+            }
+        }
+        return leftBorder;
+    }
+    public static int[] searchRange(int[] nums, int target){
+        int leftBorder = leftBorder(nums, target);
+        int rightBorder = rightBorder(nums, target);
+        // (1)在数组的左边或者右边
+        if(leftBorder == -2 || rightBorder == -2)return new int[]{-1,-1};
+        // (3)在数组范围中，并且有目标值
+        if(rightBorder-leftBorder > 1) return new int[]{leftBorder+1, rightBorder-1};
+        return new int[]{-1,-1};
+    }
+
 
     public static void main(String[] args) {
         int[] nums = new int[6];
         nums[0] = 3;
         nums[1] = 5;
         nums[2] = 6;
-        nums[3] = 8;
+        nums[3] = 6;
         nums[4] = 9;
         nums[5] = 14;
         int index1 = search1(nums, 8);
         int index2 = search2(nums, 18);
         int index3 = search3(nums, 18);
         int index5 = search5(nums, 7);
+        int[] index6 = searchRange(nums, 7);
         System.out.println(index1);
         System.out.println(index2);
         System.out.println(index3);
         System.out.println(index5);
+        for (int i = 0;i < index6.length;i++){
+                System.out.println(index6[i]);
+        }
     }
 }
